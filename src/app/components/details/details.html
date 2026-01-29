@@ -1,0 +1,105 @@
+<div class="details-container">
+  <div class="hint-box">
+    <div class="hint-icon">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <circle cx="10" cy="10" r="8" stroke="white" stroke-width="2"/>
+        <path d="M10 6V10M10 14H10.01" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="hint-content">
+      <strong>Hint!</strong> If your offering has tiers or variations, they will be added on the next step. These are details shared by all tiers.
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Core Details</h3>
+    
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="offeringName">Offering Name</label>
+        <input 
+          type="text" 
+          id="offeringName" 
+          [ngModel]="offeringName()"
+          (ngModelChange)="offeringName.set($event)"
+          placeholder="Insert name..."
+          maxlength="85"
+        />
+        <div class="char-count">{{ offeringName().length }}/85</div>
+      </div>
+
+      <div class="form-group">
+        <label for="keyFeatures">Key Features <span class="label-hint">(shown as bullet points)</span></label>
+        @for (feature of keyFeatures(); track $index) {
+          <div class="feature-input-wrapper">
+            <input 
+              type="text" 
+              [value]="feature"
+              (input)="updateKeyFeature($index, $any($event.target).value)"
+              placeholder="Feature description..."
+              maxlength="50"
+            />
+            <div class="char-count">{{ feature.length }}/50</div>
+          </div>
+        }
+        <button class="btn-add-feature" (click)="addKeyFeature()">
+          Add Bullet Point
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group full-width">
+      <label for="tagline">Tagline</label>
+      <textarea 
+        id="tagline" 
+        rows="3"
+        [ngModel]="tagline()"
+        (ngModelChange)="tagline.set($event)"
+        maxlength="100"
+      ></textarea>
+      <div class="char-count">{{ tagline().length }}/100</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Description</h3>
+    <div class="info-badge">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M8 4.8V8M8 11.2H8.008" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span>Can be added or edited later from the Offerings page</span>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="description">Offering Description</label>
+        <textarea 
+          id="description" 
+          rows="5"
+          [ngModel]="offeringDescription()"
+          (ngModelChange)="offeringDescription.set($event)"
+          maxlength="350"
+        ></textarea>
+        <div class="char-count">{{ offeringDescription().length }}/350</div>
+      </div>
+
+      <div class="form-group">
+        <label for="tags">Tags</label>
+        <div class="tags-list">
+          @for (tag of tags(); track $index) {
+            <div class="tag-item">
+              <span>{{ tag }}</span>
+              <button class="tag-remove" (click)="removeTag($index)">×</button>
+            </div>
+          }
+          <button class="tag-add" (click)="addTag()">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M8 3.33333V12.6667M3.33333 8H12.6667" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

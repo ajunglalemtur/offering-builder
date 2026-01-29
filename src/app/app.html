@@ -1,0 +1,103 @@
+<!-- Main application container -->
+<div class="app-container">
+  <!-- Top navigation bar with step indicator -->
+  <div class="header">
+    <app-stepper></app-stepper>
+  </div>
+
+  <!-- Main content area -->
+  <div class="content">
+    <!-- Page header with dynamic title based on current step -->
+    <div class="content-header">
+      <div class="main-heading">
+        <!-- Step 1: Offering Type Selection -->
+        @if (state.currentStep() === 1) {
+          <h1>What are you offering?</h1>
+          <p class="subtitle">Pick the type that suits your offering the most.</p>
+        }
+        <!-- Step 2: Details Form -->
+        @if (state.currentStep() === 2) {
+          <h1>Offering Details</h1>
+          <p class="subtitle">Describe your offering's characteristics</p>
+        }
+        <!-- Step 3: Pricing Configuration -->
+        @if (state.currentStep() === 3) {
+          <h1>Pricing Tiers</h1>
+          <p class="subtitle">Configure your pricing structure</p>
+        }
+        <!-- Step 4: Image Upload -->
+        @if (state.currentStep() === 4) {
+          <h1>Images</h1>
+          <p class="subtitle">Add visual content to your offering</p>
+        }
+      </div>
+      
+      <!-- Preview button (available on all steps) -->
+      <button class="preview-button" aria-label="Preview offering card">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M10 3.75C6.5 3.75 3.5 6.25 2.5 10C3.5 13.75 6.5 16.25 10 16.25C13.5 16.25 16.5 13.75 17.5 10C16.5 6.25 13.5 3.75 10 3.75Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M10 12.5C11.3807 12.5 12.5 11.3807 12.5 10C12.5 8.61929 11.3807 7.5 10 7.5C8.61929 7.5 7.5 8.61929 7.5 10C7.5 11.3807 8.61929 12.5 10 12.5Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Preview Card*
+      </button>
+    </div>
+
+    <!-- Step-specific content -->
+    
+    <!-- Step 1 Content: Offering Type Selection -->
+    @if (state.currentStep() === 1) {
+      <app-company-info></app-company-info>
+      <app-offering-type></app-offering-type>
+    }
+    
+    <!-- Step 2 Content: Details Form -->
+    @if (state.currentStep() === 2) {
+      <app-details></app-details>
+    }
+
+    <!-- Step 3 Content: Pricing Tiers (Coming Soon) -->
+    @if (state.currentStep() === 3) {
+      <div class="placeholder">
+        <h2>Tiers Configuration</h2>
+        <p>This page will allow you to configure pricing tiers.</p>
+      </div>
+    }
+
+    <!-- Step 4 Content: Image Upload (Coming Soon) -->
+    @if (state.currentStep() === 4) {
+      <div class="placeholder">
+        <h2>Image Upload</h2>
+        <p>This page will allow you to upload images for your offering.</p>
+      </div>
+    }
+  </div>
+
+  <!-- Bottom navigation bar -->
+  <div class="footer">
+    <!-- Cancel button - resets the entire wizard -->
+    <button class="btn-cancel" (click)="cancel()">Cancel</button>
+    
+    <!-- Navigation buttons -->
+    <div class="footer-right">
+      <!-- Previous button - goes back one step (disabled on first step) -->
+      <button 
+        class="btn-secondary" 
+        (click)="previousStep()"
+        [disabled]="state.currentStep() === 1"
+        aria-label="Go to previous step">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Previous
+      </button>
+      
+      <!-- Continue button - advances to next step -->
+      <button class="btn-primary" (click)="nextStep()" aria-label="Continue to next step">
+        Continue
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M7.5 15L12.5 10L7.5 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>

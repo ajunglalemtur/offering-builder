@@ -1,0 +1,47 @@
+<div class="offering-type-container">
+  <!-- Section header -->
+  <div class="offering-header">
+    <h2>Pick Offering Type</h2>
+  </div>
+  
+  <!-- Grid of offering type cards -->
+  <div class="offering-cards">
+    @for (option of offeringOptions; track option.type) {
+      <div 
+        class="offering-card" 
+        [class.selected]="isSelected(option.type)"
+        [class.suggested]="isSuggested(option.type)"
+        (click)="selectOffering(option.type)"
+        role="button"
+        tabindex="0"
+        [attr.aria-pressed]="isSelected(option.type)">
+        
+        <!-- Suggested badge (only shown on recommended option) -->
+        @if (isSuggested(option.type)) {
+          <div class="suggested-badge">Suggested!</div>
+        }
+        
+        <!-- Icon placeholder -->
+        <div class="offering-icon">
+          <span class="icon-placeholder"></span>
+        </div>
+        
+        <!-- Offering title and description -->
+        <div class="offering-title">{{ option.title }}</div>
+        <div class="offering-description">{{ option.description }}</div>
+      </div>
+    }
+  </div>
+
+  <!-- Information box explaining the selected type -->
+  <div class="explanation-box">
+    <div class="explanation-icon">💡</div>
+    <div class="explanation-content">
+      <div class="explanation-title">Service Explanation</div>
+      <div class="explanation-text">
+        Works best for companies that offer consultancies and other work you provide.<br>
+        Configure Pricing Tiers in the next step.
+      </div>
+    </div>
+  </div>
+</div>

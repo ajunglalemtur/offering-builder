@@ -1,0 +1,122 @@
+.offering-type-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.offering-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 2rem;
+}
+
+.offering-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.offering-card {
+  position: relative;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.offering-card:hover {
+  border-color: #f87171;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.offering-card.suggested {
+  border-color: #ef4444;
+  border-width: 2px;
+}
+
+.offering-card.selected {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+}
+
+.suggested-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ef4444;
+  color: white;
+  padding: 0.25rem 1rem;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.offering-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6;
+  border-radius: 8px;
+}
+
+.icon-placeholder {
+  width: 32px;
+  height: 32px;
+  background-color: #9ca3af;
+  border-radius: 4px;
+}
+
+.offering-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.offering-description {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.explanation-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background-color: #cffafe;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.explanation-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.explanation-content {
+  flex: 1;
+}
+
+.explanation-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0c4a6e;
+  margin-bottom: 0.5rem;
+}
+
+.explanation-text {
+  font-size: 14px;
+  color: #0c4a6e;
+  line-height: 1.5;
+}
