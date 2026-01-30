@@ -1,0 +1,394 @@
+<!-- Tiers and Pricing Section -->
+<div class="tiers-container">
+  
+  <!-- Hint Box -->
+  <div class="hint-box">
+    <div class="hint-badge">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <circle cx="8" cy="8" r="7" stroke="white" stroke-width="2"/>
+        <path d="M8 4V8M8 11H8.01" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span>Hint!</span>
+    </div>
+    <span class="hint-text">If your offering has tiers or variations, they will be added on the next step. These are details shared by all tiers.</span>
+  </div>
+
+  <!-- Tiers Section Header -->
+  <div class="tiers-section-header">
+    <h2 class="tiers-title">Tiers</h2>
+    <div class="selected-offering-type">
+      <span class="type-label">Selected offering type:</span>
+      <span class="type-value">
+        <span class="type-icon">🎯</span>
+        {{ getOfferingTypeDisplay() }}
+        <button class="type-dropdown-btn" aria-label="Change offering type">▼</button>
+      </span>
+    </div>
+  </div>
+
+  <!-- Recommendation box (shown when no tiers exist) -->
+  @if (showRecommendationBox()) {
+    <div class="recommendation-card">
+      <div class="recommendation-left">
+        <div class="unita-ai-badge">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 2L9.5 6.5L14 8L9.5 9.5L8 14L6.5 9.5L2 8L6.5 6.5L8 2Z" fill="white"/>
+          </svg>
+          <span>Unita AI</span>
+        </div>
+        
+        <h3 class="recommendation-title">Recommended tier structure for {{ getOfferingTypeDisplay() }}s:</h3>
+        
+        <div class="tier-options">
+          <button 
+            class="tier-option-btn"
+            [class.selected]="selectedRecommendedTier() === 'starter'"
+            (click)="selectRecommendedTier('starter')">
+            <span class="tier-option-icon">⋮⋮</span>
+            Starter
+          </button>
+          <button 
+            class="tier-option-btn"
+            [class.selected]="selectedRecommendedTier() === 'professional'"
+            (click)="selectRecommendedTier('professional')">
+            <span class="tier-option-icon">⋮⋮</span>
+            Professional
+            <span class="heart-icon">❤️</span>
+          </button>
+          <button 
+            class="tier-option-btn"
+            [class.selected]="selectedRecommendedTier() === 'enterprise'"
+            (click)="selectRecommendedTier('enterprise')">
+            <span class="tier-option-icon">⋮⋮</span>
+            Enterprise
+          </button>
+        </div>
+        
+        <p class="recommendation-desc">{{ getRecommendationText() }}</p>
+        
+        <button 
+          class="btn-use-structure" 
+          (click)="useRecommendedStructure()"
+          aria-label="Use recommended tier structure">
+          Use This Structure
+        </button>
+      </div>
+      
+      <div class="recommendation-right">
+        <h3 class="build-own-title">Build your own:</h3>
+        <button 
+          class="btn-add-own-tier" 
+          (click)="addCustomTier()"
+          aria-label="Add your own tier">
+          Add your own Tier
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Tier tabs and editor (shown when tiers exist) -->
+  @if (wizardState.tiers().length > 0) {
+    <div class="tiers-editor">
+      
+      <!-- Tier selection tabs -->
+      <div class="tier-tabs">
+        @for (tier of wizardState.tiers(); track tier.id; let i = $index) {
+          <button
+            class="tier-tab"
+            [class.active]="isTierSelected(tier.id)"
+            [class.dragging]="draggedTierId === tier.id"
+            (click)="selectTier(tier.id)"
+            (dragstart)="onDragStart($event, tier.id, i)"
+            (dragend)="onDragEnd($event)"
+            (dragover)="onDragOver($event, i)"
+            (drop)="onDrop($event, i)"
+            draggable="true"
+            [attr.aria-label]="'Select ' + tier.name + ' tier'"
+            [attr.aria-selected]="isTierSelected(tier.id)">
+            <span class="tier-tab-icon">⋮⋮</span>
+            {{ tier.name }}
+            @if (tier.isPopular) {
+              <span class="popular-icon" aria-label="Popular choice">❤️</span>
+            }
+          </button>
+        }
+      </div>
+
+      <!-- Tier edit form (only shown when a tier is selected) -->
+      @if (selectedTier) {
+        <div class="tier-form">
+          
+          <!-- Two-column layout -->
+          <div class="form-columns">
+            
+            <!-- Left column: Tier Details -->
+            <div class="form-column">
+              <h3 class="section-title">Tier Details</h3>
+              
+              <!-- Tier Name -->
+              <div class="form-group">
+                <label for="tier-name">Tier Name</label>
+                <div class="input-with-counter">
+                  <input
+                    id="tier-name"
+                    type="text"
+                    class="form-input"
+                    [ngModel]="selectedTier.name"
+                    (ngModelChange)="updateTierName($event)"
+                    maxlength="50"
+                    placeholder="e.g., Professional"
+                    aria-label="Tier name">
+                  <span class="char-counter">{{ selectedTier.name.length }}/50</span>
+                </div>
+              </div>
+
+              <!-- Display Name Override Toggle -->
+              <div class="form-group">
+                <label class="toggle-label">
+                  <input
+                    type="checkbox"
+                    class="toggle-checkbox"
+                    [checked]="selectedTier.displayNameOverride.length > 0"
+                    aria-label="Enable display name override">
+                  <span class="toggle-text">Offering Display Name Overwrite</span>
+                </label>
+                @if (selectedTier.displayNameOverride.length > 0 || selectedTier.displayNameOverride === '') {
+                  <input
+                    type="text"
+                    class="form-input"
+                    [ngModel]="selectedTier.displayNameOverride"
+                    (ngModelChange)="updateDisplayNameOverride($event)"
+                    placeholder="Optional display name"
+                    aria-label="Display name override">
+                }
+              </div>
+
+              <!-- Supersede Cheaper Tier -->
+              <div class="form-group">
+                <label for="supersede-tier">Supersede Cheaper Tier</label>
+                <select
+                  id="supersede-tier"
+                  class="form-select"
+                  [ngModel]="selectedTier.supersedeTier"
+                  (ngModelChange)="updateSupersedeTier($event)"
+                  aria-label="Select tier to supersede">
+                  <option value="">None</option>
+                  @for (tier of getAvailableTiersForSupersede(); track tier.id) {
+                    <option [value]="tier.id">{{ tier.name }}</option>
+                  }
+                </select>
+              </div>
+
+              <!-- Tier Details (Bullet Points) -->
+              <div class="form-group">
+                <label>Tier Details</label>
+                @for (bullet of selectedTier.bulletPoints; track $index; let bulletIndex = $index) {
+                  <div class="bullet-item">
+                    <div class="input-with-counter">
+                      <input
+                        type="text"
+                        class="form-input"
+                        [ngModel]="bullet"
+                        (ngModelChange)="updateBulletPoint(bulletIndex, $event)"
+                        maxlength="100"
+                        placeholder="e.g., More AI Credits"
+                        [attr.aria-label]="'Bullet point ' + (bulletIndex + 1)">
+                      <span class="char-counter">{{ bullet.length }}/100</span>
+                    </div>
+                    @if (selectedTier.bulletPoints.length > 1) {
+                      <button
+                        class="btn-remove"
+                        (click)="removeBulletPoint(bulletIndex)"
+                        [attr.aria-label]="'Remove bullet point ' + (bulletIndex + 1)">
+                        ✕
+                      </button>
+                    }
+                  </div>
+                }
+                <button 
+                  class="btn-add-bullet" 
+                  (click)="addBulletPoint()"
+                  aria-label="Add bullet point">
+                  + Add Bullet Point
+                </button>
+              </div>
+
+              <!-- Mark as Popular Choice -->
+              <div class="form-group">
+                <label class="toggle-label">
+                  <input
+                    type="checkbox"
+                    class="toggle-checkbox"
+                    [ngModel]="selectedTier.isPopular"
+                    (ngModelChange)="togglePopular($event)"
+                    aria-label="Mark as popular choice">
+                  <span class="toggle-text">Mark as Popular Choice</span>
+                </label>
+              </div>
+
+              <!-- Delete Tier Button -->
+              @if (wizardState.tiers().length > 1) {
+                <button 
+                  class="btn-delete-tier" 
+                  (click)="deleteCurrentTier()"
+                  aria-label="Delete this tier">
+                  Delete Tier
+                </button>
+              }
+            </div>
+
+            <!-- Right column: Tier Pricing -->
+            <div class="form-column">
+              <h3 class="section-title">Tier Pricing</h3>
+
+              <!-- Info about pricing -->
+              <div class="info-box">
+                <span class="info-icon">ℹ️</span>
+                <span class="info-text">
+                  Pricing type influenced by offering choice. 
+                  <a href="#" class="info-link" (click)="wizardState.setCurrentStep(1); $event.preventDefault()">Adjust Offering Type</a>
+                </span>
+              </div>
+
+              <!-- Main Billing Type (only for services) -->
+              @if (wizardState.selectedOfferingType() !== 'product') {
+                <div class="form-group">
+                  <label>Main Billing Type</label>
+                  <div class="billing-type-buttons">
+                    <button
+                      class="billing-btn"
+                      [class.active]="selectedTier.billingType === 'per-project'"
+                      (click)="updateBillingType('per-project')"
+                      aria-label="Per Project billing">
+                      Per Project
+                    </button>
+                    <button
+                      class="billing-btn"
+                      [class.active]="selectedTier.billingType === 'hourly'"
+                      (click)="updateBillingType('hourly')"
+                      aria-label="Hourly billing">
+                      Hourly
+                    </button>
+                    <button
+                      class="billing-btn"
+                      [class.active]="selectedTier.billingType === 'monthly-retainer'"
+                      (click)="updateBillingType('monthly-retainer')"
+                      aria-label="Monthly Retainer billing">
+                      Monthly Retainer
+                    </button>
+                  </div>
+                </div>
+              }
+
+              <!-- Hourly pricing recommendation -->
+              @if (selectedTier.billingType === 'hourly' && !selectedTier.hasPriceRange) {
+                <div class="recommendation-hint">
+                  <span class="unita-badge-small">Unita</span>
+                  <span>For Hourly-based pricing, Price Ranges are usually recommended</span>
+                </div>
+              }
+
+              <!-- Price Range Toggle -->
+              <div class="form-group">
+                <label class="toggle-label">
+                  <input
+                    type="checkbox"
+                    class="toggle-checkbox"
+                    [ngModel]="selectedTier.hasPriceRange"
+                    (ngModelChange)="togglePriceRange($event)"
+                    aria-label="Enable price range">
+                  <span class="toggle-text">Price Range</span>
+                </label>
+              </div>
+
+              <!-- Price inputs -->
+              @if (selectedTier.hasPriceRange) {
+                <!-- Price Range: From and To -->
+                <div class="form-group">
+                  <label for="price-from">From</label>
+                  <div class="price-input-group" [class.disabled]="selectedTier.requestQuoteOnly">
+                    <span class="currency-label">{{ selectedTier.currency }}</span>
+                    <input
+                      id="price-from"
+                      type="number"
+                      class="form-input price-input"
+                      [ngModel]="selectedTier.requestQuoteOnly ? 0 : selectedTier.priceFrom"
+                      (ngModelChange)="updatePriceFrom($event)"
+                      [disabled]="selectedTier.requestQuoteOnly"
+                      min="0"
+                      step="0.01"
+                      aria-label="Price from">
+                    <span class="price-unit">/{{ selectedTier.priceUnit }}</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="price-to">To</label>
+                  <div class="price-input-group" [class.disabled]="selectedTier.requestQuoteOnly">
+                    <span class="currency-label">{{ selectedTier.currency }}</span>
+                    <input
+                      id="price-to"
+                      type="number"
+                      class="form-input price-input"
+                      [ngModel]="selectedTier.requestQuoteOnly ? 0 : selectedTier.priceTo"
+                      (ngModelChange)="updatePriceTo($event)"
+                      [disabled]="selectedTier.requestQuoteOnly"
+                      min="0"
+                      step="0.01"
+                      aria-label="Price to">
+                    <span class="price-unit">/{{ selectedTier.priceUnit }}</span>
+                  </div>
+                </div>
+              } @else {
+                <!-- Single Price -->
+                <div class="form-group">
+                  <label for="price">Price</label>
+                  <div class="price-input-group" [class.disabled]="selectedTier.requestQuoteOnly">
+                    <span class="currency-label">{{ selectedTier.currency }}</span>
+                    <input
+                      id="price"
+                      type="number"
+                      class="form-input price-input"
+                      [ngModel]="selectedTier.requestQuoteOnly ? 0 : selectedTier.priceFrom"
+                      (ngModelChange)="updatePriceFrom($event)"
+                      [disabled]="selectedTier.requestQuoteOnly"
+                      min="0"
+                      step="0.01"
+                      aria-label="Price">
+                    @if (selectedTier.priceUnit) {
+                      <span class="price-unit">/{{ selectedTier.priceUnit }}</span>
+                    }
+                  </div>
+                </div>
+              }
+
+              <!-- Request Quote Only -->
+              <div class="form-group">
+                <label class="toggle-label">
+                  <input
+                    type="checkbox"
+                    class="toggle-checkbox"
+                    [ngModel]="selectedTier.requestQuoteOnly"
+                    (ngModelChange)="toggleRequestQuote($event)"
+                    aria-label="Request quote only">
+                  <span class="toggle-text">Request Quote Only</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Add New Tier Button -->
+      <div class="add-tier-section">
+        <button 
+          class="btn-add-new-tier" 
+          (click)="addCustomTier()"
+          aria-label="Add another tier">
+          <span class="add-icon">+</span>
+          Add Another Tier
+        </button>
+      </div>
+    </div>
+  }
+</div>

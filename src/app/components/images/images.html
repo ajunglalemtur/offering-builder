@@ -1,0 +1,171 @@
+<!-- Images and Media Section -->
+<div class="images-container">
+  
+  <!-- Two Column Layout -->
+  <div class="images-layout">
+    
+    <!-- Left Column: Add Images Box -->
+    <div class="images-box">
+    <h2 class="section-title">Add Images</h2>
+    
+    <!-- Thumbnail Upload -->
+    <div class="upload-section">
+      <label class="upload-label">Thumbnail</label>
+      
+      <!-- Hidden file input -->
+      <input
+        type="file"
+        id="thumbnail-upload"
+        class="file-input-hidden"
+        accept=".png,.jpg,.jpeg,.webp"
+        (change)="onThumbnailFileSelected($event)"
+        aria-label="Upload thumbnail image">
+      
+      <!-- Thumbnail upload area -->
+      @if (!hasThumbnail) {
+        <div 
+          class="upload-area"
+          (click)="triggerThumbnailUpload()"
+          (drop)="onThumbnailDrop($event)"
+          (dragover)="onDragOver($event)"
+          role="button"
+          tabindex="0"
+          aria-label="Click or drag to upload thumbnail image">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" class="upload-icon">
+            <path d="M24 32V16M24 16L18 22M24 16L30 22" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M38 28V38H10V28" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p class="upload-text">Drop or click to upload Thumbnail Image</p>
+          <p class="upload-hint">.PNG, .JPG and .WEBP supported</p>
+        </div>
+      } @else {
+        <!-- Thumbnail preview -->
+        <div class="image-preview">
+          <img [src]="thumbnailImage!.url" alt="Thumbnail preview" class="preview-image">
+          <button 
+            class="btn-remove-image"
+            (click)="removeThumbnail()"
+            aria-label="Remove thumbnail">
+            ✕
+          </button>
+        </div>
+      }
+    </div>
+
+    <!-- Gallery Images -->
+    <div class="upload-section">
+      <label class="upload-label">More Gallery Images</label>
+      
+      <!-- Hidden file input for gallery -->
+      <input
+        type="file"
+        id="gallery-upload"
+        class="file-input-hidden"
+        accept=".png,.jpg,.jpeg,.webp"
+        (change)="onGalleryFileSelected($event)"
+        aria-label="Upload gallery image">
+      
+      <div class="gallery-grid">
+        <!-- Gallery images -->
+        @for (image of galleryImages; track image.id) {
+          <div class="gallery-item">
+            <img [src]="image.url" alt="Gallery image" class="gallery-image">
+            <button 
+              class="btn-remove-image"
+              (click)="removeGalleryImage(image.id)"
+              aria-label="Remove gallery image">
+              ✕
+            </button>
+          </div>
+        }
+        
+        <!-- Add button (shown when less than 4 gallery images) -->
+        @if (galleryImages.length < 4) {
+          <button 
+            class="gallery-add-btn"
+            (click)="triggerGalleryUpload()"
+            aria-label="Add gallery image">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M12 5V19M5 12H19" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Add</span>
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Fallback Color Selection -->
+    <div class="fallback-section">
+      <h3 class="fallback-title">No Images? Choose a fallback color:</h3>
+      
+      <div class="color-grid">
+        @for (colorOption of fallbackColors; track colorOption.color) {
+          <button
+            class="color-option"
+            [class]="colorOption.bgClass"
+            [class.selected]="isColorSelected(colorOption.color)"
+            (click)="selectFallbackColor(colorOption.color)"
+            [attr.aria-label]="'Select ' + colorOption.name + ' color'"
+            [attr.aria-pressed]="isColorSelected(colorOption.color)">
+            @if (isColorSelected(colorOption.color)) {
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="check-icon">
+                <path d="M20 6L9 17L4 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            }
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+  
+  <!-- Right Column: Card Preview -->
+  <div class="preview-sidebar">
+    <h2 class="preview-title">Card Preview</h2>
+    
+    <div class="offering-card">
+      <!-- Card Image/Color Header -->
+      <div class="card-header" [class]="getCardHeaderClass()">
+        @if (wizardState.thumbnailImage()) {
+          <img [src]="wizardState.thumbnailImage()!.url" alt="Offering thumbnail" class="card-thumbnail">
+        }
+      </div>
+      
+      <!-- Card Content -->
+      <div class="card-body">
+        <h3 class="card-title">{{ getOfferingName() }}</h3>
+        <p class="card-description">{{ getOfferingDescription() }}</p>
+        
+        <!-- Key Features -->
+        @if (getKeyFeatures().length > 0) {
+          <ul class="card-features">
+            @for (feature of getKeyFeatures(); track $index) {
+              @if (feature) {
+                <li>{{ feature }}</li>
+              }
+            }
+          </ul>
+        }
+        
+        <!-- Tier Badge -->
+        @if (wizardState.tiers().length > 0) {
+          <div class="card-tier-badge">+{{ wizardState.tiers().length }} Tiers</div>
+        }
+        
+        <!-- Pricing -->
+        <div class="card-pricing">
+          @if (getLowestPrice() > 0) {
+            <span class="price-from">{{ wizardState.tiers()[0]?.currency || 'NZD' }} {{ getLowestPrice() }}</span>
+            <span class="price-separator">/{{ getPriceUnit() }}</span>
+            @if (getHighestPrice() > getLowestPrice()) {
+              <span class="price-to"> — {{ wizardState.tiers()[0]?.currency || 'NZD' }} {{ getHighestPrice() }}/{{ getPriceUnit() }}</span>
+            }
+          } @else {
+            <span class="price-quote">Request Quote</span>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  </div>
+</div>

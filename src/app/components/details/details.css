@@ -69,9 +69,16 @@
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
   margin-bottom: 1.5rem;
+}
+
+.form-column-left,
+.form-column-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .form-group {
@@ -164,6 +171,33 @@
   padding: 0.5rem 1rem;
   font-size: 14px;
   color: #374151;
+  transition: all 0.2s ease;
+}
+
+.tag-item.editing {
+  background-color: white;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.tag-text {
+  cursor: pointer;
+  user-select: none;
+}
+
+.tag-text:hover {
+  color: #1f2937;
+}
+
+.tag-input {
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-size: 14px;
+  color: #374151;
+  outline: none;
+  min-width: 60px;
+  max-width: 200px;
 }
 
 .tag-remove {

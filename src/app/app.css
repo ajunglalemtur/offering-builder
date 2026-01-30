@@ -97,14 +97,18 @@
 
 /*Footer Navigation*/
 
-/* Bottom navigation bar */
+/* Bottom navigation bar - sticky at bottom */
 .footer {
+  position: sticky;
+  bottom: 0;
   background: white;
   border-top: 1px solid #e5e7eb;
   padding: 1.5rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  z-index: 100;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
 }
 
 /* Right side navigation buttons container */
@@ -178,4 +182,319 @@
 .btn-primary:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.4);
+}
+
+/* ===================================
+   Preview Modal
+   =================================== */
+
+.preview-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.preview-modal-content {
+  background: white;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.preview-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.preview-modal-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.btn-close-modal {
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.btn-close-modal:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.preview-card-container {
+  padding: 32px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ===================================
+   Offering Card Preview
+   =================================== */
+
+.offering-card {
+  width: 100%;
+  max-width: 380px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+.card-header {
+  width: 100%;
+  height: 200px;
+  position: relative;
+}
+
+.card-header.has-image {
+  background: #f3f4f6;
+}
+
+.card-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Fallback color classes */
+.card-header-burgundy {
+  background: linear-gradient(135deg, #8B1538 0%, #C84B5F 100%);
+}
+
+.card-header-orange {
+  background: linear-gradient(135deg, #C2410C 0%, #F97316 100%);
+}
+
+.card-header-green {
+  background: linear-gradient(135deg, #15803D 0%, #22C55E 100%);
+}
+
+.card-header-magenta {
+  background: linear-gradient(135deg, #A21CAF 0%, #D946EF 100%);
+}
+
+.card-header-gray {
+  background: linear-gradient(135deg, #374151 0%, #6B7280 100%);
+}
+
+.card-body {
+  padding: 24px;
+}
+
+.card-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 12px 0;
+}
+
+.card-description {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+}
+
+.card-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px 0;
+}
+
+.card-features li {
+  font-size: 14px;
+  color: #374151;
+  padding: 4px 0;
+  position: relative;
+  padding-left: 20px;
+}
+
+.card-features li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #3b82f6;
+  font-weight: bold;
+}
+
+.card-tier-badge {
+  display: inline-block;
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.card-pricing {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.price-from {
+  color: #dc2626;
+  font-size: 18px;
+}
+
+.price-separator {
+  color: #6b7280;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.price-to {
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.price-quote {
+  color: #3b82f6;
+  font-size: 16px;
+}
+
+/* ===================================
+   Responsive Design
+   =================================== */
+
+/* Tablet and below (768px) */
+@media (max-width: 768px) {
+  .content {
+    padding: 1.5rem 1rem;
+  }
+
+  .content-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .main-heading h1 {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  .preview-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .footer {
+    padding: 1rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .btn-cancel {
+    order: 3;
+    width: 100%;
+  }
+
+  .footer-right {
+    order: 1;
+    width: 100%;
+    flex: 1;
+  }
+
+  .btn-secondary,
+  .btn-primary {
+    flex: 1;
+  }
+
+  /* Preview Modal - Full screen on mobile */
+  .preview-modal-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .preview-modal-content {
+    max-width: 100%;
+    max-height: 95vh;
+    border-radius: 16px 16px 0 0;
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .preview-modal-header {
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+  }
+
+  .preview-modal-header h2 {
+    font-size: 18px;
+  }
+
+  .preview-card-container {
+    padding: 20px;
+  }
+
+  .btn-close-modal {
+    width: 36px;
+    height: 36px;
+    font-size: 28px;
+  }
+}
+
+/* Mobile phones (480px) */
+@media (max-width: 480px) {
+  .main-heading h1 {
+    font-size: 20px;
+  }
+
+  .content {
+    padding: 1rem 0.75rem;
+  }
+
+  .footer {
+    padding: 0.75rem;
+  }
+
+  .btn-cancel,
+  .btn-secondary,
+  .btn-primary {
+    padding: 0.625rem 1rem;
+    font-size: 14px;
+  }
 }

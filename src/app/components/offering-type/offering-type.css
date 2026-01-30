@@ -35,11 +35,6 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-.offering-card.suggested {
-  border-color: #ef4444;
-  border-width: 2px;
-}
-
 .offering-card.selected {
   border-color: #ef4444;
   background-color: #fef2f2;
@@ -59,21 +54,37 @@
 }
 
 .offering-icon {
-  width: 56px;
-  height: 56px;
+  width: 72px;
+  height: 72px;
   margin: 0 auto 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f3f4f6;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  border-radius: 12px;
+  transition: all 0.3s ease;
 }
 
-.icon-placeholder {
-  width: 32px;
-  height: 32px;
-  background-color: #9ca3af;
-  border-radius: 4px;
+.offering-icon svg {
+  color: #6b7280;
+  transition: all 0.3s ease;
+}
+
+.offering-card:hover .offering-icon {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  transform: scale(1.05);
+}
+
+.offering-card:hover .offering-icon svg {
+  color: #ef4444;
+}
+
+.offering-card.selected .offering-icon {
+  background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+}
+
+.offering-card.selected .offering-icon svg {
+  color: white;
 }
 
 .offering-title {
@@ -119,4 +130,69 @@
   font-size: 14px;
   color: #0c4a6e;
   line-height: 1.5;
+}
+
+/* Product Type Selection */
+
+.product-type-selection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.product-type-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: white;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  font-size: 15px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.product-type-btn svg {
+  flex-shrink: 0;
+}
+
+.product-type-btn:hover {
+  border-color: #f87171;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.product-type-btn.selected {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+  color: #dc2626;
+}
+
+.product-type-btn.selected svg {
+  stroke: #dc2626;
+}
+
+/* Responsive Design */
+
+@media (max-width: 768px) {
+  .product-type-selection {
+    grid-template-columns: 1fr;
+  }
 }
